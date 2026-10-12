@@ -1,0 +1,9 @@
+# Keep text files consistent across operating systems.
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+.python-version text eol=lf
+
+# Preserve the original CSV bytes (including CRLF) for the recorded SHA-256.
+data/raw/online_shoppers_intention.csv -text

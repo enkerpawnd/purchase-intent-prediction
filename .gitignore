@@ -1,0 +1,39 @@
+# Python environments, caches and build outputs
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Notebook checkpoints, local settings and secrets
+.ipynb_checkpoints/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.log
+
+# Source data: explicitly retain only the attributed project CSV and notes
+/data/raw/*
+!/data/raw/README.md
+!/data/raw/online_shoppers_intention.csv
+
+# Generated artifacts: retain the directory placeholders
+/data/processed/*
+!/data/processed/.gitkeep
+/models/*
+!/models/.gitkeep
+/results/*
+!/results/.gitkeep
