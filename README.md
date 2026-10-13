@@ -30,8 +30,10 @@ Python dependencies were installed successfully on macOS arm64 using pip
 26.2.1. Homebrew manages the base Python installation, so project dependencies
 are installed in `.venv`.
 
-The environment has **not been runtime-tested**. On this Mac, XGBoost's
-separate OpenMP runtime (`libomp`) is still missing; its installation was
+The full environment has **not been runtime-tested**. PIP-02's pandas-only
+dataset audit ran successfully; it does not verify the model or app libraries.
+Installation of XGBoost's
+separate OpenMP runtime (`libomp`) was
 deferred. Runtime checks and second-teammate reproduction remain manual. See
 [reports/reproduction.md](reports/reproduction.md) for the installation record
 and pending checks.
@@ -99,6 +101,13 @@ The unchanged team-supplied CSV is included at
 the checkout is needed. See [data/raw/README.md](data/raw/README.md) for the
 source, license, citation, expected checksum and replacement instructions.
 
+The [PIP-02 source audit](reports/source_dataset_audit.md) records verified
+counts, the feature dictionary, category coverage, range flags and the policy
+to retain all sessions while grouping identical predictors for future splits.
+The [executed audit notebook](notebooks/02_source_dataset_audit.ipynb) provides
+rerunnable verification; the report includes a terminal command that uses the
+existing environment without Jupyter.
+
 Source: Sakar, C. & Kastro, Y. (2018). _Online Shoppers Purchasing Intention
 Dataset_ [Dataset]. UCI Machine Learning Repository.
 [doi:10.24432/C5F88Q](https://doi.org/10.24432/C5F88Q).
@@ -144,8 +153,9 @@ inputs and output paths when those entry points are implemented.
 
 ## Manual reproduction handoff
 
-Python dependency installation completed; no automated tests, library-import
-checks or project executions were performed. A second teammate should use a
+Python dependency installation completed. The PIP-01 installation record did
+not include automated tests, library-import checks or project executions;
+PIP-02 subsequently ran the pandas-only dataset audit linked above. A second teammate should use a
 fresh checkout and environment, follow the installation and CSV instructions
 (including the OpenMP prerequisite when applicable), then manually run:
 

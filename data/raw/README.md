@@ -36,5 +36,8 @@ CSV if its checksum differs; record and investigate the difference first.
 Git attributes disable line-ending conversion for this file so that checkout
 on Windows preserves its bytes.
 
-The detailed schema and data-quality audit belong to PIP-02; loading the CSV
-does not establish feature availability or an evaluation protocol.
+See the [PIP-02 audit and data dictionary](../../reports/source_dataset_audit.md)
+and [executed audit notebook](../../notebooks/02_source_dataset_audit.ipynb) for
+verified counts, repeated-row checks, observed categories, ranges and retention
+policy. The audit does not establish feature availability or freeze an
+evaluation protocol.
