@@ -1,0 +1,196 @@
+{
+  "evidence": {
+    "checks": {
+      "all_source_rows_once": true,
+      "both_classes_in_all_partitions_and_cv_sides": true,
+      "cv_excludes_validation_and_test": true,
+      "no_groups_cross_partitions": true,
+      "no_groups_cross_training_cv": true,
+      "source_group_ids_match": true
+    },
+    "partitions": {
+      "test": {
+        "groups": 1834,
+        "non_purchases": 1563,
+        "purchase_fraction": 0.15467820443482963,
+        "purchases": 286,
+        "rows": 1849
+      },
+      "train": {
+        "groups": 8546,
+        "non_purchases": 7296,
+        "purchase_fraction": 0.15477293790546803,
+        "purchases": 1336,
+        "rows": 8632
+      },
+      "validation": {
+        "groups": 1825,
+        "non_purchases": 1563,
+        "purchase_fraction": 0.15467820443482963,
+        "purchases": 286,
+        "rows": 1849
+      }
+    },
+    "training_cv": [
+      {
+        "fit": {
+          "groups": 6837,
+          "non_purchases": 5837,
+          "purchase_fraction": 0.15467052860246197,
+          "purchases": 1068,
+          "rows": 6905
+        },
+        "fold": 0,
+        "holdout": {
+          "groups": 1709,
+          "non_purchases": 1459,
+          "purchase_fraction": 0.15518239722061378,
+          "purchases": 268,
+          "rows": 1727
+        }
+      },
+      {
+        "fit": {
+          "groups": 6836,
+          "non_purchases": 5836,
+          "purchase_fraction": 0.1548153511947864,
+          "purchases": 1069,
+          "rows": 6905
+        },
+        "fold": 1,
+        "holdout": {
+          "groups": 1710,
+          "non_purchases": 1460,
+          "purchase_fraction": 0.15460335842501446,
+          "purchases": 267,
+          "rows": 1727
+        }
+      },
+      {
+        "fit": {
+          "groups": 6838,
+          "non_purchases": 5837,
+          "purchase_fraction": 0.15479293368085723,
+          "purchases": 1069,
+          "rows": 6906
+        },
+        "fold": 2,
+        "holdout": {
+          "groups": 1708,
+          "non_purchases": 1459,
+          "purchase_fraction": 0.15469293163383546,
+          "purchases": 267,
+          "rows": 1726
+        }
+      },
+      {
+        "fit": {
+          "groups": 6836,
+          "non_purchases": 5837,
+          "purchase_fraction": 0.15479293368085723,
+          "purchases": 1069,
+          "rows": 6906
+        },
+        "fold": 3,
+        "holdout": {
+          "groups": 1710,
+          "non_purchases": 1459,
+          "purchase_fraction": 0.15469293163383546,
+          "purchases": 267,
+          "rows": 1726
+        }
+      },
+      {
+        "fit": {
+          "groups": 6837,
+          "non_purchases": 5837,
+          "purchase_fraction": 0.15479293368085723,
+          "purchases": 1069,
+          "rows": 6906
+        },
+        "fold": 4,
+        "holdout": {
+          "groups": 1709,
+          "non_purchases": 1459,
+          "purchase_fraction": 0.15469293163383546,
+          "purchases": 267,
+          "rows": 1726
+        }
+      }
+    ]
+  },
+  "positive_label": "Revenue=True",
+  "row_index_definition": "Zero-based CSV data-row position, excluding header; use iloc.",
+  "schema_version": 1,
+  "settings": {
+    "cv_algorithm": "StratifiedGroupKFold",
+    "cv_folds": 5,
+    "group_contract": "predictor-json-sha256-v1",
+    "holdout_algorithm": "StratifiedGroupKFold",
+    "holdout_folds": 20,
+    "partition_folds": {
+      "test": [
+        17,
+        18,
+        19
+      ],
+      "train": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "validation": [
+        14,
+        15,
+        16
+      ]
+    },
+    "seed": 42,
+    "shuffle": true,
+    "target_ratios": {
+      "test": 0.15,
+      "train": 0.7,
+      "validation": 0.15
+    }
+  },
+  "source": {
+    "predictor_columns": [
+      "Administrative",
+      "Administrative_Duration",
+      "Informational",
+      "Informational_Duration",
+      "ProductRelated",
+      "ProductRelated_Duration",
+      "BounceRates",
+      "ExitRates",
+      "PageValues",
+      "SpecialDay",
+      "Month",
+      "OperatingSystems",
+      "Browser",
+      "Region",
+      "TrafficType",
+      "VisitorType",
+      "Weekend"
+    ],
+    "rows": 12330,
+    "sha256": "b3055ee355f59134d851d32641183cb4a8b45def7124d2f50442a042f358e0d9"
+  },
+  "versions": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "python": "3.14.8",
+    "scikit-learn": "1.9.1"
+  }
+}

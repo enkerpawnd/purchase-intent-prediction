@@ -30,9 +30,16 @@ Thumbs.db
 !/data/raw/README.md
 !/data/raw/online_shoppers_intention.csv
 
-# Generated artifacts: retain the directory placeholders
+# Processed data: retain only the frozen split manifests
 /data/processed/*
-!/data/processed/.gitkeep
+!/data/processed/splits/
+/data/processed/splits/*
+!/data/processed/splits/train.csv
+!/data/processed/splits/validation.csv
+!/data/processed/splits/test.csv
+!/data/processed/splits/metadata.json
+
+# Generated model/results artifacts: retain placeholders for empty directories
 /models/*
 !/models/.gitkeep
 /results/*
