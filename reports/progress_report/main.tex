@@ -167,9 +167,119 @@ and our decision to fit all preprocessing within training folds only.
 
 \section{Dataset}
 
-You should write about your dataset here, following the guidelines regarding item 1. This section may be 0.5-1 pages. Depending on your specific dataset, you may want to include subsections for the preprocessing, annotation, etc.
+\subsection{Source and structure}
+
+We use the complete UCI Online Shoppers Purchasing Intention Dataset
+\citep{sakar2018dataset}, introduced by \citet{sakar2019realtime} and
+distributed as a single CSV file under a CC BY 4.0 license. It contains
+12,330 sessions, each from a different user over a one-year period, with 17
+input features and the Boolean target \texttt{Revenue}, which records whether
+the session ended in a purchase (not the amount spent). No scraping, API
+access or manual annotation was required, since every session already carries
+its recorded outcome. Table~\ref{tab:features} summarizes the inputs.
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{p{0.52\columnwidth}p{0.36\columnwidth}}
+    \hline
+    \textbf{Inputs} & \textbf{Type} \\
+    \hline
+    Administrative, Informational, ProductRelated (pages visited) & Count \\
+    The three matching \texttt{\_Duration} fields (total time on each page type) & Continuous, units unspecified \\
+    BounceRates, ExitRates & Fraction in $[0,1]$ \\
+    PageValues (average value of pages visited before a transaction) & Continuous, currency unspecified \\
+    SpecialDay (closeness to a holiday) & Score in $\{0, 0.2, \dots, 1\}$ \\
+    Month, VisitorType & Nominal label \\
+    OperatingSystems, Browser, Region, TrafficType & Nominal integer code \\
+    Weekend & Boolean \\
+    \hline
+  \end{tabular}
+  \caption{\label{tab:features}
+    The 17 session-level inputs. Category codes have no documented meaning
+    or order.}
+\end{table}
+
+\subsection{Properties of the data}
+
+Before dividing the file, we audited it in its entirety. Every numeric field is non-negative, and there are no missing or blank values. Five characteristics of the data influenced our design.
+
+\paragraph{Class imbalance.} Only 1,908 sessions (15.5\%) end in a purchase,
+against 10,422 non-purchases. A classifier that never predicts a purchase is
+84.5\% accurate, which is why we do not use accuracy as our main metric
+(Section~\ref{sec:results}).
+
+\paragraph{Skewed activity and meaningful zeros.} All ten numeric inputs are
+positively skewed. Product-page time has a median of 598.9 but a maximum of
+63,974, and sessions view a median of 18 product pages but only one
+administrative page and no informational pages. Zeros are common and
+informative rather than missing: PageValues is zero for 77.9\% of sessions,
+and SpecialDay for 89.9\%. Bounce and exit rates both stop at 0.2, with about
+700 sessions each at exactly that value, which suggests a boundary in how the
+source computed them.
+
+\paragraph{Correlated inputs.} On the training split, each page count is
+strongly rank-correlated with its duration (Spearman $\rho$ of 0.88--0.95),
+and bounce and exit rates are moderately correlated ($\rho = 0.60$).
+PageValues has by far the strongest association with purchase
+($\rho = 0.62$), as discussed in the introduction.
+
+\paragraph{Uneven categories.} January and April are absent entirely, and the
+sessions per month range from 184 (February) to 3,364 (May). Purchase rates
+also vary by group (Figure~\ref{fig:context}): 25.5\% of training sessions in
+November end in a purchase compared with 2.1\% in February, and new visitors
+purchase more often than returning visitors (23.9\% vs.\ 14.1\%). Several
+browser, operating system and traffic-type codes occur fewer than 20 times,
+and some occur only once.
+
+\paragraph{Identical sessions.} 201 sessions fall into 76 groups whose 17
+inputs are identical, and no group has conflicting labels. Because the data
+has no user identifiers, we cannot tell whether these are true duplicates or
+different users with the same summary, so we keep them all.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/purchase_context.png}
+  \caption{\label{fig:context}
+    Training split ($n = 8{,}632$). Left: class balance. Centre and right:
+    share of sessions ending in a purchase by month and by visitor type, with
+    sample sizes. The dashed line marks the overall purchase rate (15.5\%).}
+\end{figure*}
+
+\subsection{Preprocessing}
+
+We left the source file unchanged and removed no sessions, outliers or
+repeated rows; extreme values are kept unless there is evidence they are
+errors. All preprocessing decisions were made using the training split only.
+
+\paragraph{Splitting.} We divided the sessions into training, validation and
+test sets of 8,632, 1,849 and 1,849 sessions (about 70/15/15) with a fixed
+random seed. The split is stratified, so each set keeps the 15.5\% purchase
+rate, and grouped, so identical sessions always land in the same set. This
+prevents a model from being evaluated on an exact copy of a training example.
+The training set is further divided into five fixed cross-validation folds
+under the same rules. The assignments are saved to files and verified on
+every load, so every team member uses the same split
+(Section~\ref{sec:results}).
+
+\paragraph{Validation and encoding.} Every session passes through an input
+check that rejects missing values, negative counts, rates outside $[0, 1]$
+and invalid category codes, without silently filling in or clipping values.
+The six nominal fields are one-hot encoded, \texttt{Weekend} becomes a 0/1
+indicator, and numeric inputs are standardized for logistic regression but
+left unscaled for tree-based models. These steps are combined with each model
+in a single scikit-learn pipeline, so the encoder's categories and the
+scaler's statistics are learned from the training rows of each fold only.
+Categories that were not seen during training are encoded as all zeros. With
+all 17 inputs, this produces 74 model features (Section~\ref{sec:features}).
+
+\paragraph{Limitations.} The released data contains session summaries only,
+with no timestamps, year, user identifiers or page-by-page click sequences.
+We therefore cannot build a time-ordered split or show that a model would
+generalize to later periods or other websites.
 
 \section{Features}
+\label{sec:features}
 
 Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 2. This may range from 0.25 pages to 0.5 pages.
 
@@ -178,6 +288,7 @@ Describe any features you used for your model, or how your data was input to you
 Describe your model and implementation here. Refer to item 4. This may take around a page.
 
 \section{Results and Evaluation}
+\label{sec:results}
 
 How are you evaluating your model? What results do you have so far? What are your baselines? Refer to item 5. This may take around 0.5 pages.
 
