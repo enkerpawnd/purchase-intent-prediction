@@ -281,7 +281,61 @@ generalize to later periods or other websites.
 \section{Features}
 \label{sec:features}
 
-Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 2. This may range from 0.25 pages to 0.5 pages.
+The 17 session-level inputs in Table~\ref{tab:features}, encoded as
+previously mentioned in the preprocessing phase, are fed into our models.
+74 model features are obtained by fitting the encoder on the training split
+(Table~\ref{tab:encoded}). Each nominal field is represented by one
+indicator per observed level instead of its integer code as category codes
+lack a documented order.
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lr}
+    \hline
+    \textbf{Input block} & \textbf{Columns} \\
+    \hline
+    Numeric inputs & 10 \\
+    Month & 10 \\
+    OperatingSystems & 8 \\
+    Browser & 13 \\
+    Region & 9 \\
+    TrafficType & 20 \\
+    VisitorType & 3 \\
+    Weekend & 1 \\
+    \hline
+    \textbf{Total} & \textbf{74} \\
+    \hline
+  \end{tabular}
+  \caption{\label{tab:encoded}
+    Encoded model features for all 17 inputs, with category levels counted
+    on the training split.}
+\end{table}
+
+\paragraph{Feature engineering.} There are no interaction terms, ratios, or
+polynomial expansions, and the skewed numerical inputs enter the models
+without a log transform; thus far, we have not created any extra features.
+Additionally, we don't employ neural networks or learn embeddings. The
+encoding and classifier are integrated into a single scikit-learn workflow,
+and each model is given a fixed tabular vector.
+
+\paragraph{Feature sets.} Automatic feature selection is not used by us.
+Rather, in order to examine how performance is dependent on inputs that can
+be challenging to replicate during prediction time, we define three feature
+sets beforehand. All 17 inputs (74 encoded features) are used in the first.
+Since it summarizes past page values and it's unclear if the necessary
+measurements would be accessible prior to a purchase, the second eliminates
+PageValues (16 inputs, 73 features). Additionally, the third eliminates
+BounceRates and ExitRates (14 inputs, 71 features), which rely on analytics
+definitions and history at the page level. Since the supplied data does not
+specify when each measurement was made, these sets represent neither claims
+of leakage nor deployment readiness.
+
+All three sets use the same data splits and cross-validation folds, and each
+is fitted as its own pipeline, so a removed input is truly absent rather than
+filled with zero at prediction time. Our current logistic regression model
+uses the full 17-input set (Section~\ref{sec:results}); the comparison
+across feature sets is planned for the next stage of the project.
 
 \section{Implementation}
 
