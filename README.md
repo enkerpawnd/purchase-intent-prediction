@@ -167,8 +167,34 @@ Use `load_frozen_splits` and `iter_training_cv` from `src.split_data` instead of
 making new splits. The [evaluation protocol](reports/evaluation_protocol.md)
 explains the split and CV choices, records actual class/fold counts, and defines
 the metrics, validation F1 threshold rule and one-time final-test boundary.
-Development EDA now uses training rows only. No model or test performance has
+Development EDA uses training rows only. No model or test performance has
 been evaluated.
+
+### Training exploration and feature availability (PIP-04)
+
+Read [what the training sessions tell us](reports/training_data_exploration.md)
+for five figures and explanations of purchase rates, long-tailed activity,
+recorded zeros, rare categories and relationships between measurements. All
+summaries use the 8,632 frozen training sessions. To reproduce them:
+
+```bash
+python -m src.explore_training_data
+python -m unittest discover -s tests
+```
+
+Reusable analysis lives in `src/explore_training_data.py`; the selected figures,
+small summary tables and provenance are retained in `results/eda/`. No notebook
+or additional dependency is needed. The script checks the frozen split before
+selecting training rows, preserves the source CSV and fits no preprocessing or
+models.
+
+The [feature availability notes](reports/feature_availability.md) define raw
+types, likely collection needs and missing/unseen-input handling for the future
+app. [src/feature_sets.py](src/feature_sets.py) provides the required 17-input
+and 16-input (without PageValues) lists, plus the optional 14-input list without
+PageValues, BounceRates and ExitRates. PageValues is strongly associated with
+purchase in training, but its computation timing is unresolved; this exploration
+does not establish label leakage or live-site readiness.
 
 ### Model and application status
 
@@ -176,6 +202,7 @@ been evaluated.
 | --------------------- | ----------------------------------------------------------------------------- |
 | Load source CSV       | Available: `python src/load_data.py`                                          |
 | Freeze/check split    | Available: `python src/split_data.py` / `python src/split_data.py --check`    |
+| Explore training data | Available: `python -m src.explore_training_data`                            |
 | Train models          | Pending PIP-07, PIP-12 and PIP-13; no training entry point yet                |
 | Evaluate models       | Protocol frozen in PIP-03; metric execution pending PIP-06 and models         |
 | Launch prediction app | Pending PIP-18; no Streamlit app yet                                          |
