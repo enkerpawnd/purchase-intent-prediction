@@ -65,3 +65,6 @@ Thumbs.db
 !/results/eda/pagevalues_zero.csv
 !/results/eda/provenance.json
 !/results/eda/feature_sets.json
+
+# Small, deterministic validation evidence for the dummy baselines
+!/results/baselines/

@@ -14,7 +14,7 @@ data/
 models/         Generated fitted pipelines and model artifacts (ignored)
 notebooks/      Exploratory notebooks; put reusable logic in src/
 reports/        Written reports and manual reproduction evidence
-results/        Generated metrics, tables and figures (ignored)
+results/        Generated metrics, tables and figures (ignored except baselines/)
 src/            Reusable source code and runnable entry points
 ```
 
@@ -168,8 +168,8 @@ Use `load_frozen_splits` and `iter_training_cv` from `src.split_data` instead of
 making new splits. The [evaluation protocol](reports/evaluation_protocol.md)
 explains the split and CV choices, records actual class/fold counts, and defines
 the metrics, validation F1 threshold rule and one-time final-test boundary.
-Development EDA uses training rows only. No validation or test performance has
-been evaluated.
+Development EDA uses training rows only. Only the PIP-06 dummy baselines have
+been evaluated, on validation; no test performance has been evaluated.
 
 ### Training exploration and feature availability (PIP-04)
 
@@ -226,6 +226,21 @@ and random forest, each feature variant), saves them to the ignored
 inference after reloading. These are smoke artifacts; model selection and
 validation/test performance evaluation belong to later modeling tasks.
 
+### Dummy baselines and common evaluation output
+
+```bash
+python -m src.baselines
+python -m unittest tests.test_baselines
+```
+
+Fits majority-class and class-prior dummies on training labels only and scores
+the validation partition (never test). `src/evaluation.py` holds the shared
+metrics, threshold rule, zero-division handling (undefined precision/F1 = 0) and
+export format that later models should reuse. Results, with run ID, split ID and
+seed on every row, are written to `results/baselines/`; see
+[reports/baseline_results.md](reports/baseline_results.md). Validation floors:
+AP 0.1547, ROC-AUC 0.5, F1 0.2679.
+
 ### Model and application status
 
 | Task                  | Current status                                                                |
@@ -235,7 +250,7 @@ validation/test performance evaluation belong to later modeling tasks.
 | Explore training data | Available: `python -m src.explore_training_data`                            |
 | Preprocess/save/reload | Available: `python -m src.check_preprocessing`; reusable factories in `src/preprocessing.py` |
 | Train models          | Pending PIP-07, PIP-12 and PIP-13; no training entry point yet                |
-| Evaluate models       | Protocol frozen in PIP-03; metric execution pending PIP-06 and models         |
+| Evaluate models       | Common evaluation + dummy baselines: `python -m src.baselines`               |
 | Launch prediction app | Pending PIP-18; no Streamlit app yet                                          |
 
 When the app exists, launch its documented source file with

@@ -1,0 +1,17 @@
+run_id,split_id,seed,model,partition,threshold_rule,threshold,actual,predicted,count
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,reference_0.5,0.5,non_purchase,non_purchase,1563
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,reference_0.5,0.5,non_purchase,purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,reference_0.5,0.5,purchase,non_purchase,286
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,reference_0.5,0.5,purchase,purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,validation_max_f1,0.0,non_purchase,non_purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,validation_max_f1,0.0,non_purchase,purchase,1563
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,validation_max_f1,0.0,purchase,non_purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,majority_class,validation,validation_max_f1,0.0,purchase,purchase,286
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,reference_0.5,0.5,non_purchase,non_purchase,1563
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,reference_0.5,0.5,non_purchase,purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,reference_0.5,0.5,purchase,non_purchase,286
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,reference_0.5,0.5,purchase,purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,validation_max_f1,0.15477293790546803,non_purchase,non_purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,validation_max_f1,0.15477293790546803,non_purchase,purchase,1563
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,validation_max_f1,0.15477293790546803,purchase,non_purchase,0
+baselines-7636d7f13ae2,split-8b25e438ab683c89,42,class_prior,validation,validation_max_f1,0.15477293790546803,purchase,purchase,286
