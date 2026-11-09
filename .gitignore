@@ -44,3 +44,24 @@ Thumbs.db
 !/models/.gitkeep
 /results/*
 !/results/.gitkeep
+
+# PIP-04: intentionally publish this small, reproducible training-only evidence
+!/results/eda/
+/results/eda/*
+!/results/eda/01_purchase_context.png
+!/results/eda/02_page_activity.png
+!/results/eda/03_zeros_and_rates.png
+!/results/eda/04_relationships.png
+!/results/eda/05_pagevalues.png
+!/results/eda/class_balance.csv
+!/results/eda/numeric_summary.csv
+!/results/eda/month.csv
+!/results/eda/visitor_type.csv
+!/results/eda/categories.csv
+!/results/eda/count_duration_flags.csv
+!/results/eda/extreme_durations.csv
+!/results/eda/rate_boundaries.csv
+!/results/eda/spearman.csv
+!/results/eda/pagevalues_zero.csv
+!/results/eda/provenance.json
+!/results/eda/feature_sets.json

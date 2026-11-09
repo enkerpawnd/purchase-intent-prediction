@@ -1,0 +1,13 @@
+{
+  "source_sha256": "b3055ee355f59134d851d32641183cb4a8b45def7124d2f50442a042f358e0d9",
+  "train_manifest_sha256": "b923f54507d24ff86a55db54383a9817f1d39b67c0a07e637a82503a0509e0d2",
+  "rows": 8632,
+  "purchases": 1336,
+  "scope": "Frozen training rows only; held-out rows used only by split integrity checks.",
+  "versions": {
+    "python": "3.14.8",
+    "pandas": "3.1.1",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2"
+  }
+}

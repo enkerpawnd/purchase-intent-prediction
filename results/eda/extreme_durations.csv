@@ -1,0 +1,10 @@
+source_row_index,page_count,duration,feature
+8071,5,3398.75,Administrative_Duration
+5776,7,2720.5,Administrative_Duration
+5152,17,2629.254,Administrative_Duration
+8071,6,2549.375,Informational_Duration
+6020,9,2252.0333,Informational_Duration
+5512,5,2195.3,Informational_Duration
+8071,449,63973.522,ProductRelated_Duration
+5152,705,43171.233,ProductRelated_Duration
+8784,517,27009.859,ProductRelated_Duration
