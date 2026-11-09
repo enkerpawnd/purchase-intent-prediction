@@ -24,10 +24,10 @@
 %
 % and set <dim> to something 5cm or larger.
 
-\title{Group X Progress Report:\\My Group's Project Name}
+\title{Group 32 Progress Report:\\Predicting Purchase Outcomes from Online Shopping Session Behavior}
 
 
-\author{First Author, Second Author, Third Author \\
+\author{Ankur Pandey, Allen Tong, Krish Haryani \\
   \texttt{\{macid1,macid2,macid3\}@mcmaster.ca} }
 
 %\author{
@@ -75,11 +75,95 @@
 
 \section{Introduction}
 
-Here, write a brief introduction to the problem you are solving. This can be adapted from your problem description and motivation from the original proposal. This should be around 0.25-0.5 pages.
+Most visits to an online store end without a purchase. If a retailer could
+estimate, from the way a session unfolds, how likely it is to end in a
+purchase, it could learn which browsing patterns are associated with
+conversion and where its website could be improved. Our project builds a
+machine learning application that makes this estimate for individual
+e-commerce sessions.
+
+We frame the task as supervised, single-label binary classification on
+tabular data. Each record in the UCI Online Shoppers Purchasing Intention
+Dataset \citep{sakar2018dataset} summarizes one session with 17 inputs: page
+counts and time spent on administrative, informational and product pages;
+bounce and exit rates; the PageValues analytics measure; calendar context; and
+device, region, traffic-source and visitor-type categories. The target,
+\texttt{Revenue}, records whether the session ended in a purchase. The model
+estimates a purchase probability and assigns a class using a probability
+threshold selected on validation data.
+
+Three properties make the problem harder than it first appears. First,
+purchases are rare: only 15.5\% of the 12,330 sessions end in a purchase, so a
+model that always predicts ``no purchase'' is 84.5\% accurate while being
+useless. Second, shopper behavior is heterogeneous, and the activity measures
+are long-tailed. Third, a single analytics feature, PageValues, carries much
+of the signal. In our training split, 55.6\% of sessions with a positive
+PageValues end in a purchase, compared with 3.9\% of sessions where it is zero.
+However, PageValues is derived from the value of pages that previously led to
+transactions. Not every website records it, sites may compute it differently,
+and it is unclear whether it would be available before a purchase is made. A
+model that relies on it may therefore be less reliable outside this dataset.
+
+Our contribution is not a new leaderboard result on this dataset. Instead, we
+aim to provide (i) a careful comparison of majority-class baselines,
+regularized logistic regression, random forest and XGBoost under a fixed,
+leakage-aware evaluation protocol; (ii) a feature-availability study that
+compares all 17 inputs with subsets that exclude PageValues and, optionally,
+the bounce and exit rates; (iii) calibrated purchase probabilities rather than
+labels alone; and (iv) an inspectable Streamlit demonstration that returns
+probabilities, predicted classes and influential inputs for a session summary.
+Our results describe session-summary classification on one website and do not
+establish generalization to future periods or other stores.
 
 \section{Related Work}
 
-Here, talk about the related work you encountered for your approach. Cite at least 5 references. Refer to item 2. No one has done exactly your task? Write about the most similar thing you can find. This should be around 0.25-0.5 pages.
+\paragraph{Purchase intent on this dataset.}
+The dataset was introduced by \citet{sakar2019realtime}, who proposed a
+real-time system with two modules. The first module predicts purchasing
+intention from session-level aggregate features like ours, comparing a
+multilayer perceptron with other classifiers such as random forests and
+support vector machines, and using oversampling and feature selection to
+address class imbalance. The second module uses an LSTM recurrent network on
+sequential clickstream data to estimate the likelihood that a visitor will
+leave the site. Our work extends their session-level study in two directions:
+we explicitly measure how much performance depends on PageValues and other
+analytics-derived inputs, and we evaluate probability quality in addition to
+classification accuracy.
+
+\paragraph{Clickstream models of conversion.}
+Earlier marketing research modeled conversion directly from browsing
+behavior. \citet{moe2004dynamic} modeled each visitor's probability of
+buying as it evolves across repeated visits, accounting for differences
+between shoppers, and showed that conversion behavior changes over time.
+\citet{montgomery2004clickstream} modeled the sequence of pages a user views
+and showed that the browsing path carries information that improves
+predictions of purchase conversion. Our dataset contains only per-session
+summaries without raw page sequences, so we cannot use path models directly,
+but these studies motivate the page-count and duration inputs we use.
+
+\paragraph{Models for tabular data.}
+Our candidate models are standard strong performers on structured data.
+Random forests \citep{breiman2001random} average many decorrelated decision
+trees, and XGBoost \citep{chen2016xgboost} is a regularized,
+scalable implementation of gradient-boosted trees. A comparison by
+\citet{shwartzziv2022tabular} found that XGBoost generally matched or
+outperformed recent deep learning models on tabular benchmarks while
+requiring less tuning, which supports our choice to focus on tree ensembles and a
+logistic regression baseline instead of a neural network.
+
+\paragraph{Imbalance, evaluation and calibration.}
+\citet{he2009imbalanced} survey learning from imbalanced data, including
+resampling and cost-sensitive methods, and note that overall accuracy can
+be misleading when one class dominates. Following \citet{saito2015precision},
+who show that precision--recall analysis is more informative than ROC
+analysis when positives are rare, we use purchase-class average precision as
+our primary metric. \citet{niculescu2005predicting} show that common learners
+such as boosted trees and random forests can produce systematically distorted
+probabilities that calibration methods correct, which motivates our use of
+Brier scores and reliability plots. Finally, \citet{kaufman2012leakage}
+describe how features that would not be available at prediction time can
+inflate reported performance. This concern underlies our PageValues study
+and our decision to fit all preprocessing within training folds only.
 
 \section{Dataset}
 
