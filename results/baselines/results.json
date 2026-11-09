@@ -1,0 +1,172 @@
+{
+  "checks": {
+    "class_prior": {
+      "ap_equals_validation_prevalence": true,
+      "constant_score": true,
+      "fit_rows_are_training_only": true,
+      "reference_predictions_match_dummy_predict": true,
+      "roc_auc_is_0.5": true,
+      "score_equals_training_derived_value": true
+    },
+    "majority_class": {
+      "ap_equals_validation_prevalence": true,
+      "constant_score": true,
+      "fit_rows_are_training_only": true,
+      "reference_predictions_match_dummy_predict": true,
+      "roc_auc_is_0.5": true,
+      "score_equals_training_derived_value": true
+    },
+    "test_partition_not_scored": true,
+    "training_purchase_prior": 0.15477293790546803,
+    "validation_prevalence": 0.15467820443482963
+  },
+  "conventions": {
+    "average_precision": "sklearn average_precision_score (non-interpolated)",
+    "confusion_matrix_layout": "rows actual, columns predicted; [[tn, fp], [fn, tp]] ordered non_purchase, purchase",
+    "hard_class_rule": "purchase when score >= threshold",
+    "id_columns": [
+      "run_id",
+      "split_id",
+      "seed"
+    ],
+    "positive_label": "Revenue=True",
+    "score_metrics": [
+      "average_precision",
+      "roc_auc",
+      "brier"
+    ],
+    "zero_division": 0,
+    "zero_division_meaning": "undefined precision/recall/F1 reported as 0"
+  },
+  "metrics": [
+    {
+      "accuracy": 0.8453217955651704,
+      "average_precision": 0.15467820443482963,
+      "brier": 0.15467820443482963,
+      "f1": 0.0,
+      "fn": 286,
+      "fp": 0,
+      "model": "majority_class",
+      "n": 1849,
+      "n_purchases": 286,
+      "partition": "validation",
+      "precision": 0.0,
+      "predicted_purchases": 0,
+      "prevalence": 0.15467820443482963,
+      "recall": 0.0,
+      "roc_auc": 0.5,
+      "threshold": 0.5,
+      "threshold_rule": "reference_0.5",
+      "tn": 1563,
+      "tp": 0
+    },
+    {
+      "accuracy": 0.15467820443482963,
+      "average_precision": 0.15467820443482963,
+      "brier": 0.15467820443482963,
+      "f1": 0.2679156908665105,
+      "fn": 0,
+      "fp": 1563,
+      "model": "majority_class",
+      "n": 1849,
+      "n_purchases": 286,
+      "partition": "validation",
+      "precision": 0.15467820443482963,
+      "predicted_purchases": 1849,
+      "prevalence": 0.15467820443482963,
+      "recall": 1.0,
+      "roc_auc": 0.5,
+      "threshold": 0.0,
+      "threshold_rule": "validation_max_f1",
+      "tn": 0,
+      "tp": 286
+    },
+    {
+      "accuracy": 0.8453217955651704,
+      "average_precision": 0.15467820443482963,
+      "brier": 0.13075286648207712,
+      "f1": 0.0,
+      "fn": 286,
+      "fp": 0,
+      "model": "class_prior",
+      "n": 1849,
+      "n_purchases": 286,
+      "partition": "validation",
+      "precision": 0.0,
+      "predicted_purchases": 0,
+      "prevalence": 0.15467820443482963,
+      "recall": 0.0,
+      "roc_auc": 0.5,
+      "threshold": 0.5,
+      "threshold_rule": "reference_0.5",
+      "tn": 1563,
+      "tp": 0
+    },
+    {
+      "accuracy": 0.15467820443482963,
+      "average_precision": 0.15467820443482963,
+      "brier": 0.13075286648207712,
+      "f1": 0.2679156908665105,
+      "fn": 0,
+      "fp": 1563,
+      "model": "class_prior",
+      "n": 1849,
+      "n_purchases": 286,
+      "partition": "validation",
+      "precision": 0.15467820443482963,
+      "predicted_purchases": 1849,
+      "prevalence": 0.15467820443482963,
+      "recall": 1.0,
+      "roc_auc": 0.5,
+      "threshold": 0.15477293790546803,
+      "threshold_rule": "validation_max_f1",
+      "tn": 0,
+      "tp": 286
+    }
+  ],
+  "notes": {
+    "constant_score_ap": "A constant score ranks every session equally, so AP equals the evaluation-set purchase prevalence and ROC-AUC is 0.5, regardless of the constant value. Any useful model must exceed both.",
+    "full_csv_always_no_purchase": {
+      "accuracy": 0.8452554744525548,
+      "description": "Always predicting no purchase on all 12,330 CSV labels. Computed from label counts only; this is not a validation or test result.",
+      "non_purchases": 10422,
+      "purchase_recall": 0.0,
+      "purchases": 1908,
+      "sessions": 12330
+    }
+  },
+  "run": {
+    "code_sha256": {
+      "baselines.py": "b71b4d5dea1bcdf53a4917f9b25aad1b7f17842471e96adfd6f4747f4f2b398b",
+      "evaluation.py": "f00b5cc980b1a5a7643342f6540352e05858cae950ad18d1d817c9441023bf46",
+      "split_data.py": "3cda43a84f61c0e8d90b21cdcdd84126dd1995d7e541da4433f89315350a0d83"
+    },
+    "evaluation_partition": "validation",
+    "fit_partition": "train",
+    "models": {
+      "class_prior": {
+        "estimator": "sklearn.dummy.DummyClassifier",
+        "strategy": "prior"
+      },
+      "majority_class": {
+        "estimator": "sklearn.dummy.DummyClassifier",
+        "strategy": "most_frequent"
+      }
+    },
+    "run_id": "baselines-7636d7f13ae2",
+    "seed": 42,
+    "source_sha256": "b3055ee355f59134d851d32641183cb4a8b45def7124d2f50442a042f358e0d9",
+    "split_id": "split-8b25e438ab683c89",
+    "task": "dummy baselines",
+    "threshold_rules": {
+      "reference_0.5": "fixed reference threshold 0.5",
+      "validation_max_f1": "protocol rule: maximize validation purchase F1 over distinct scores plus 0/0.5/1; ties to the largest threshold"
+    },
+    "versions": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "python": "3.14.10",
+      "scikit-learn": "1.9.1"
+    }
+  }
+}
