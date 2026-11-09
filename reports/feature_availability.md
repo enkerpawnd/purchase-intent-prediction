@@ -9,8 +9,10 @@ For PIP-04, keep a clear distinction between a demonstration using a saved or
 manually entered session and a live website integration. The former can show
 how a model behaves on dataset-compatible inputs. The latter needs a defined
 decision point, compatible measurements and data captured before that point.
-The recommendations below are a design contract for later work; PIP-04 does
-not implement an input form or preprocessing pipeline.
+The recommendations below were the PIP-04 design contract. The reusable
+[preprocessing implementation](preprocessing.md) now enforces required inputs,
+type/range validation and unseen-category handling. An input form and its
+training-support warnings remain future work.
 
 ## The three feature lists
 

@@ -31,10 +31,11 @@ Python dependencies were installed successfully on macOS arm64 using pip
 26.2.1. Homebrew manages the base Python installation, so project dependencies
 are installed in `.venv`.
 
-The full model/application environment has **not been runtime-tested**. PIP-02's
-pandas-only dataset audit and PIP-03's split generation and one-time verification
-ran successfully; these exercise pandas, NumPy and scikit-learn splitting but
-do not verify model fitting or the application libraries.
+The full model/application environment has **not been runtime-tested**. The
+dataset audit, frozen split, training exploration and preprocessing checks ran
+successfully. Preprocessing checks also fit/save/reload small logistic regression
+and random forest pipelines on training rows; they do not verify XGBoost or the
+application libraries.
 Installation of XGBoost's
 separate OpenMP runtime (`libomp`) was
 deferred. Runtime checks and second-teammate reproduction remain manual. See
@@ -167,7 +168,7 @@ Use `load_frozen_splits` and `iter_training_cv` from `src.split_data` instead of
 making new splits. The [evaluation protocol](reports/evaluation_protocol.md)
 explains the split and CV choices, records actual class/fold counts, and defines
 the metrics, validation F1 threshold rule and one-time final-test boundary.
-Development EDA uses training rows only. No model or test performance has
+Development EDA uses training rows only. No validation or test performance has
 been evaluated.
 
 ### Training exploration and feature availability (PIP-04)
@@ -196,6 +197,35 @@ PageValues, BounceRates and ExitRates. PageValues is strongly associated with
 purchase in training, but its computation timing is unresolved; this exploration
 does not establish label leakage or live-site readiness.
 
+### Reusable preprocessing
+
+The preprocessing request corresponds to **PIP-05** in the local issue plan;
+PIP-04 above is the completed training exploration. Implementation is in
+[src/preprocessing.py](src/preprocessing.py), with the input contract, usage and
+verification evidence in [reports/preprocessing.md](reports/preprocessing.md).
+
+Use `split_features_target` to separate Revenue, then `make_model_pipeline` to
+combine an estimator with raw-input validation, one-hot category encoding,
+consistent Boolean handling and numeric scaling. All three feature variants
+are supported. Use `scale_numeric=True` for logistic regression and `False` for
+tree models. Pass the whole unfitted pipeline to training CV so learned
+statistics and vocabularies stay within each fit fold. Missing/invalid required
+values raise an explicit error; unseen categories produce an all-zero block
+for that field.
+
+To verify raw-session prediction after saving/reloading:
+
+```bash
+python -m unittest discover -s tests
+python -m src.check_preprocessing
+```
+
+The check command fits six small training-only pipelines (logistic regression
+and random forest, each feature variant), saves them to the ignored
+`models/preprocessing_smoke/` directory, and verifies normal and unseen-category
+inference after reloading. These are smoke artifacts; model selection and
+validation/test performance evaluation belong to later modeling tasks.
+
 ### Model and application status
 
 | Task                  | Current status                                                                |
@@ -203,6 +233,7 @@ does not establish label leakage or live-site readiness.
 | Load source CSV       | Available: `python src/load_data.py`                                          |
 | Freeze/check split    | Available: `python src/split_data.py` / `python src/split_data.py --check`    |
 | Explore training data | Available: `python -m src.explore_training_data`                            |
+| Preprocess/save/reload | Available: `python -m src.check_preprocessing`; reusable factories in `src/preprocessing.py` |
 | Train models          | Pending PIP-07, PIP-12 and PIP-13; no training entry point yet                |
 | Evaluate models       | Protocol frozen in PIP-03; metric execution pending PIP-06 and models         |
 | Launch prediction app | Pending PIP-18; no Streamlit app yet                                          |
