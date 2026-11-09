@@ -70,3 +70,11 @@ PAGE_COUNTS = ["Administrative", "Informational", "ProductRelated"]
 DURATIONS = [f"{name}_Duration" for name in PAGE_COUNTS]
 NUMERIC = ALL_17[:10]
 CATEGORICAL = ALL_17[10:]
+
+# EDA groups Weekend with discrete fields above; model preprocessing handles
+# it as a binary indicator, separately from these nominal categories.
+NOMINAL_CATEGORICAL = [
+    "Month", "OperatingSystems", "Browser", "Region", "TrafficType", "VisitorType"
+]
+CODE_CATEGORICAL = ["OperatingSystems", "Browser", "Region", "TrafficType"]
+BOOLEAN = ["Weekend"]
