@@ -68,3 +68,6 @@ Thumbs.db
 
 # Small, deterministic validation evidence for the dummy baselines
 !/results/baselines/
+
+# PIP-07: logistic regression validation evidence (saved model stays in models/, ignored)
+!/results/logistic_regression/

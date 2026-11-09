@@ -14,7 +14,7 @@ data/
 models/         Generated fitted pipelines and model artifacts (ignored)
 notebooks/      Exploratory notebooks; put reusable logic in src/
 reports/        Written reports and manual reproduction evidence
-results/        Generated metrics, tables and figures (ignored except baselines/)
+results/        Generated metrics, tables and figures (selected evidence versioned)
 src/            Reusable source code and runnable entry points
 ```
 
@@ -168,8 +168,9 @@ Use `load_frozen_splits` and `iter_training_cv` from `src.split_data` instead of
 making new splits. The [evaluation protocol](reports/evaluation_protocol.md)
 explains the split and CV choices, records actual class/fold counts, and defines
 the metrics, validation F1 threshold rule and one-time final-test boundary.
-Development EDA uses training rows only. Only the PIP-06 dummy baselines have
-been evaluated, on validation; no test performance has been evaluated.
+Development EDA uses training rows only. Only the PIP-06 dummies and PIP-07
+logistic regression have been evaluated, on validation; no test performance has
+been evaluated.
 
 ### Training exploration and feature availability (PIP-04)
 
@@ -241,6 +242,22 @@ seed on every row, are written to `results/baselines/`; see
 [reports/baseline_results.md](reports/baseline_results.md). Validation floors:
 AP 0.1547, ROC-AUC 0.5, F1 0.2679.
 
+### Logistic regression (PIP-07)
+
+```bash
+python -m src.train_logistic
+python -m unittest tests.test_train_logistic
+```
+
+Compares eight L2 logistic regression settings (C x unweighted/balanced) on the
+frozen training CV folds, refits the best on all training rows and evaluates it
+on validation against both dummies (never test). Writes the result table, PR
+curve, reliability bins, confusion matrices and runtimes to
+`results/logistic_regression/`, and saves the fitted pipeline to the ignored
+`models/logistic_regression/all_17_logistic.joblib`. Validation AP 0.664 vs
+0.155 for the dummies; class weighting leaves probabilities overestimated. See
+[reports/logistic_regression.md](reports/logistic_regression.md).
+
 ### Model and application status
 
 | Task                  | Current status                                                                |
@@ -249,7 +266,7 @@ AP 0.1547, ROC-AUC 0.5, F1 0.2679.
 | Freeze/check split    | Available: `python src/split_data.py` / `python src/split_data.py --check`    |
 | Explore training data | Available: `python -m src.explore_training_data`                            |
 | Preprocess/save/reload | Available: `python -m src.check_preprocessing`; reusable factories in `src/preprocessing.py` |
-| Train models          | Pending PIP-07, PIP-12 and PIP-13; no training entry point yet                |
+| Train models          | Logistic regression: `python -m src.train_logistic`; PIP-12/13 pending         |
 | Evaluate models       | Common evaluation + dummy baselines: `python -m src.baselines`               |
 | Launch prediction app | Pending PIP-18; no Streamlit app yet                                          |
 
