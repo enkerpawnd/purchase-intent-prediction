@@ -1,0 +1,9 @@
+run_id,split_id,seed,model,partition,threshold_rule,threshold,actual,predicted,count
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,reference_0.5,0.5,non_purchase,non_purchase,1364
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,reference_0.5,0.5,non_purchase,purchase,199
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,reference_0.5,0.5,purchase,non_purchase,69
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,reference_0.5,0.5,purchase,purchase,217
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,validation_max_f1,0.6057311321745114,non_purchase,non_purchase,1448
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,validation_max_f1,0.6057311321745114,non_purchase,purchase,115
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,validation_max_f1,0.6057311321745114,purchase,non_purchase,95
+logreg-b34da387f891,split-8b25e438ab683c89,42,logistic_regression,validation,validation_max_f1,0.6057311321745114,purchase,purchase,191

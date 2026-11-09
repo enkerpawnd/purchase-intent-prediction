@@ -1,0 +1,212 @@
+{
+  "run_id": "logreg-b34da387f891",
+  "cv_seconds": 5.599,
+  "final_fit_seconds": 0.142,
+  "total_seconds": 7.678,
+  "cv_fit_seconds": [
+    {
+      "setting": "C=0.01, unweighted",
+      "fold": 0,
+      "fit_seconds": 0.1123
+    },
+    {
+      "setting": "C=0.01, unweighted",
+      "fold": 1,
+      "fit_seconds": 0.1072
+    },
+    {
+      "setting": "C=0.01, unweighted",
+      "fold": 2,
+      "fit_seconds": 0.1073
+    },
+    {
+      "setting": "C=0.01, unweighted",
+      "fold": 3,
+      "fit_seconds": 0.1076
+    },
+    {
+      "setting": "C=0.01, unweighted",
+      "fold": 4,
+      "fit_seconds": 0.1065
+    },
+    {
+      "setting": "C=0.1, unweighted",
+      "fold": 0,
+      "fit_seconds": 0.1126
+    },
+    {
+      "setting": "C=0.1, unweighted",
+      "fold": 1,
+      "fit_seconds": 0.1123
+    },
+    {
+      "setting": "C=0.1, unweighted",
+      "fold": 2,
+      "fit_seconds": 0.1135
+    },
+    {
+      "setting": "C=0.1, unweighted",
+      "fold": 3,
+      "fit_seconds": 0.1137
+    },
+    {
+      "setting": "C=0.1, unweighted",
+      "fold": 4,
+      "fit_seconds": 0.1128
+    },
+    {
+      "setting": "C=1, unweighted",
+      "fold": 0,
+      "fit_seconds": 0.1224
+    },
+    {
+      "setting": "C=1, unweighted",
+      "fold": 1,
+      "fit_seconds": 0.12
+    },
+    {
+      "setting": "C=1, unweighted",
+      "fold": 2,
+      "fit_seconds": 0.1206
+    },
+    {
+      "setting": "C=1, unweighted",
+      "fold": 3,
+      "fit_seconds": 0.1244
+    },
+    {
+      "setting": "C=1, unweighted",
+      "fold": 4,
+      "fit_seconds": 0.1219
+    },
+    {
+      "setting": "C=10, unweighted",
+      "fold": 0,
+      "fit_seconds": 0.1333
+    },
+    {
+      "setting": "C=10, unweighted",
+      "fold": 1,
+      "fit_seconds": 0.1222
+    },
+    {
+      "setting": "C=10, unweighted",
+      "fold": 2,
+      "fit_seconds": 0.1254
+    },
+    {
+      "setting": "C=10, unweighted",
+      "fold": 3,
+      "fit_seconds": 0.125
+    },
+    {
+      "setting": "C=10, unweighted",
+      "fold": 4,
+      "fit_seconds": 0.1292
+    },
+    {
+      "setting": "C=0.01, balanced",
+      "fold": 0,
+      "fit_seconds": 0.1081
+    },
+    {
+      "setting": "C=0.01, balanced",
+      "fold": 1,
+      "fit_seconds": 0.1082
+    },
+    {
+      "setting": "C=0.01, balanced",
+      "fold": 2,
+      "fit_seconds": 0.107
+    },
+    {
+      "setting": "C=0.01, balanced",
+      "fold": 3,
+      "fit_seconds": 0.1088
+    },
+    {
+      "setting": "C=0.01, balanced",
+      "fold": 4,
+      "fit_seconds": 0.1084
+    },
+    {
+      "setting": "C=0.1, balanced",
+      "fold": 0,
+      "fit_seconds": 0.1141
+    },
+    {
+      "setting": "C=0.1, balanced",
+      "fold": 1,
+      "fit_seconds": 0.1182
+    },
+    {
+      "setting": "C=0.1, balanced",
+      "fold": 2,
+      "fit_seconds": 0.1157
+    },
+    {
+      "setting": "C=0.1, balanced",
+      "fold": 3,
+      "fit_seconds": 0.1151
+    },
+    {
+      "setting": "C=0.1, balanced",
+      "fold": 4,
+      "fit_seconds": 0.116
+    },
+    {
+      "setting": "C=1, balanced",
+      "fold": 0,
+      "fit_seconds": 0.1248
+    },
+    {
+      "setting": "C=1, balanced",
+      "fold": 1,
+      "fit_seconds": 0.1228
+    },
+    {
+      "setting": "C=1, balanced",
+      "fold": 2,
+      "fit_seconds": 0.126
+    },
+    {
+      "setting": "C=1, balanced",
+      "fold": 3,
+      "fit_seconds": 0.1288
+    },
+    {
+      "setting": "C=1, balanced",
+      "fold": 4,
+      "fit_seconds": 0.1252
+    },
+    {
+      "setting": "C=10, balanced",
+      "fold": 0,
+      "fit_seconds": 0.1438
+    },
+    {
+      "setting": "C=10, balanced",
+      "fold": 1,
+      "fit_seconds": 0.136
+    },
+    {
+      "setting": "C=10, balanced",
+      "fold": 2,
+      "fit_seconds": 0.1415
+    },
+    {
+      "setting": "C=10, balanced",
+      "fold": 3,
+      "fit_seconds": 0.1442
+    },
+    {
+      "setting": "C=10, balanced",
+      "fold": 4,
+      "fit_seconds": 0.1386
+    }
+  ],
+  "machine": {
+    "platform": "macOS-15.6.1-arm64-arm-64bit-Mach-O",
+    "processor": "arm64"
+  }
+}

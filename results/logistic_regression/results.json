@@ -1,0 +1,140 @@
+{
+  "checks": {
+    "all_cv_fits_converged": true,
+    "beats_dummy_ap": true,
+    "cv_uses_training_rows_only": true,
+    "final_fit_converged": true,
+    "fit_rows_are_training_only": true,
+    "reloaded_predictions_identical": true,
+    "test_partition_not_scored": true
+  },
+  "conventions": {
+    "average_precision": "sklearn average_precision_score (non-interpolated)",
+    "confusion_matrix_layout": "rows actual, columns predicted; [[tn, fp], [fn, tp]] ordered non_purchase, purchase",
+    "hard_class_rule": "purchase when score >= threshold",
+    "id_columns": [
+      "run_id",
+      "split_id",
+      "seed"
+    ],
+    "positive_label": "Revenue=True",
+    "score_metrics": [
+      "average_precision",
+      "roc_auc",
+      "brier"
+    ],
+    "zero_division": 0,
+    "zero_division_meaning": "undefined precision/recall/F1 reported as 0"
+  },
+  "metrics": [
+    {
+      "accuracy": 0.8550567874526771,
+      "average_precision": 0.6644399508988519,
+      "brier": 0.11969092842832366,
+      "f1": 0.6182336182336182,
+      "fn": 69,
+      "fp": 199,
+      "model": "logistic_regression",
+      "n": 1849,
+      "n_purchases": 286,
+      "partition": "validation",
+      "precision": 0.5216346153846154,
+      "predicted_purchases": 416,
+      "prevalence": 0.15467820443482963,
+      "recall": 0.7587412587412588,
+      "roc_auc": 0.9008272597524039,
+      "threshold": 0.5,
+      "threshold_rule": "reference_0.5",
+      "tn": 1364,
+      "tp": 217
+    },
+    {
+      "accuracy": 0.8864250946457545,
+      "average_precision": 0.6644399508988519,
+      "brier": 0.11969092842832366,
+      "f1": 0.6452702702702703,
+      "fn": 95,
+      "fp": 115,
+      "model": "logistic_regression",
+      "n": 1849,
+      "n_purchases": 286,
+      "partition": "validation",
+      "precision": 0.6241830065359477,
+      "predicted_purchases": 306,
+      "prevalence": 0.15467820443482963,
+      "recall": 0.6678321678321678,
+      "roc_auc": 0.9008272597524039,
+      "threshold": 0.6057311321745114,
+      "threshold_rule": "validation_max_f1",
+      "tn": 1448,
+      "tp": 191
+    }
+  ],
+  "notes": {
+    "dummy_baseline_run_id": "baselines-7636d7f13ae2",
+    "final_fit": {
+      "converged": true,
+      "n_iter": 44
+    },
+    "saved_pipeline": {
+      "path": "models/logistic_regression/all_17_logistic.joblib",
+      "reload_example": {
+        "predicted_purchase_at_0.5": false,
+        "purchase_probability": 0.0531606231104824,
+        "source_row_index": 18
+      }
+    }
+  },
+  "run": {
+    "code_sha256": {
+      "evaluation.py": "f00b5cc980b1a5a7643342f6540352e05858cae950ad18d1d817c9441023bf46",
+      "feature_sets.py": "8211c03cee6ec14a6a6361ba9c81dc278cf1cc32ec4bbf5a414a479256e9cf08",
+      "preprocessing.py": "afa08cab0f1944f71199e9456db4b35570001a7decb967506708ee4bc3bf25fe",
+      "split_data.py": "3cda43a84f61c0e8d90b21cdcdd84126dd1995d7e541da4433f89315350a0d83",
+      "train_logistic.py": "88d99a8443aeea3c9a445c3a804aa6f11ea4cca8cf916cc0c2b7a236e204d6cb"
+    },
+    "estimator": "sklearn.linear_model.LogisticRegression",
+    "evaluation_partition": "validation",
+    "feature_set": "all_17",
+    "fit_partition": "train",
+    "fixed_params": {
+      "fit_intercept": true,
+      "l1_ratio": 0.0,
+      "max_iter": 2000,
+      "random_state": 42,
+      "solver": "lbfgs",
+      "tol": 0.0001
+    },
+    "grid": {
+      "C": [
+        0.01,
+        0.1,
+        1.0,
+        10.0
+      ],
+      "class_weight": [
+        "none",
+        "balanced"
+      ]
+    },
+    "objective": "L2-regularized log-loss (binary cross-entropy); class_weight reweights each session's loss term",
+    "preprocessing": "src.preprocessing.make_model_pipeline(scale_numeric=True)",
+    "run_id": "logreg-b34da387f891",
+    "seed": 42,
+    "selected": {
+      "C": 0.1,
+      "class_weight": "balanced"
+    },
+    "selection_rule": "highest mean average precision over the five frozen training CV folds; exact ties keep grid order",
+    "source_sha256": "b3055ee355f59134d851d32641183cb4a8b45def7124d2f50442a042f358e0d9",
+    "split_id": "split-8b25e438ab683c89",
+    "task": "PIP-07 logistic regression",
+    "versions": {
+      "matplotlib": "3.11.2",
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "python": "3.14.10",
+      "scikit-learn": "1.9.1"
+    }
+  }
+}
