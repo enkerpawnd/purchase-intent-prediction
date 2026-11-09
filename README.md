@@ -10,7 +10,7 @@ prediction of the amount spent.
 ```text
 data/
   raw/          Original, attributed source CSV; keep unchanged
-  processed/    Generated data and split manifests (ignored)
+  processed/    Versioned frozen split manifests; other generated data ignored
 models/         Generated fitted pipelines and model artifacts (ignored)
 notebooks/      Exploratory notebooks; put reusable logic in src/
 reports/        Written reports and manual reproduction evidence
@@ -19,8 +19,9 @@ src/            Reusable source code and runnable entry points
 ```
 
 Run the commands below from the repository root unless stated otherwise. Use
-repository-relative paths in code, notebooks and configuration. Generated
-artifacts are ignored; intentionally select any small results to publish later.
+repository-relative paths in code, notebooks and configuration. The frozen split
+manifests are versioned; other generated artifacts are ignored. Intentionally
+select any small results to publish later.
 
 ## Environment and installation
 
@@ -30,8 +31,10 @@ Python dependencies were installed successfully on macOS arm64 using pip
 26.2.1. Homebrew manages the base Python installation, so project dependencies
 are installed in `.venv`.
 
-The full environment has **not been runtime-tested**. PIP-02's pandas-only
-dataset audit ran successfully; it does not verify the model or app libraries.
+The full model/application environment has **not been runtime-tested**. PIP-02's
+pandas-only dataset audit and PIP-03's split generation and one-time verification
+ran successfully; these exercise pandas, NumPy and scikit-learn splitting but
+do not verify model fitting or the application libraries.
 Installation of XGBoost's
 separate OpenMP runtime (`libomp`) was
 deferred. Runtime checks and second-teammate reproduction remain manual. See
@@ -138,11 +141,43 @@ A supplied relative path is resolved from the current working directory.
 
 ## Training, evaluation and application entry points
 
+### Frozen split and evaluation protocol (PIP-03)
+
+The frozen split manifests are included in the repository. After activating
+the environment, verify them:
+
+```bash
+python src/split_data.py --check
+```
+
+The reusable implementation is in `src/split_data.py`. The fixed-seed,
+purchase-stratified manifests are at
+`data/processed/splits/{train,validation,test}.csv`, with `metadata.json` recording
+configuration, class counts, checks and one source checksum linking saved row
+positions to their CSV. Identical predictor groups stay together. These four
+files are versioned so every teammate uses the same assignments.
+
+To reproduce the manifests if absent, run `python src/split_data.py`.
+Existing manifests are checked without being overwritten; `--check` only
+validates an existing bundle. Other generated processed data remains ignored.
+
+The frozen sizes are **8,632 train / 1,849 validation / 1,849 test**. Five
+training-only CV folds are saved in `train.csv`; validation/test never enter CV.
+Use `load_frozen_splits` and `iter_training_cv` from `src.split_data` instead of
+making new splits. The [evaluation protocol](reports/evaluation_protocol.md)
+explains the split and CV choices, records actual class/fold counts, and defines
+the metrics, validation F1 threshold rule and one-time final-test boundary.
+Development EDA now uses training rows only. No model or test performance has
+been evaluated.
+
+### Model and application status
+
 | Task                  | Current status                                                                |
 | --------------------- | ----------------------------------------------------------------------------- |
 | Load source CSV       | Available: `python src/load_data.py`                                          |
+| Freeze/check split    | Available: `python src/split_data.py` / `python src/split_data.py --check`    |
 | Train models          | Pending PIP-07, PIP-12 and PIP-13; no training entry point yet                |
-| Evaluate models       | Pending PIP-03/PIP-06 and model implementation; no evaluation entry point yet |
+| Evaluate models       | Protocol frozen in PIP-03; metric execution pending PIP-06 and models         |
 | Launch prediction app | Pending PIP-18; no Streamlit app yet                                          |
 
 When the app exists, launch its documented source file with
