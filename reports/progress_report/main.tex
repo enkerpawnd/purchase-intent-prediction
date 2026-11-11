@@ -1,3 +1,5 @@
+% Build from this directory with: latexmk -pdf main.tex
+% A single pdflatex pass does not resolve the bibliography or cross-references.
 \documentclass[11pt]{article}
 
 % Change "review" to "final" to generate the final (sometimes called camera-ready) version.
@@ -17,6 +19,8 @@
 \usepackage{microtype}
 \usepackage{inconsolata}
 \usepackage{graphicx}
+\usepackage{array}
+\usepackage{amsmath}
 
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
@@ -181,7 +185,7 @@ its recorded outcome. Table~\ref{tab:features} summarizes the inputs.
 \begin{table}[t]
   \centering
   \small
-  \begin{tabular}{p{0.52\columnwidth}p{0.36\columnwidth}}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.52\columnwidth}>{\raggedright\arraybackslash}p{0.36\columnwidth}}
     \hline
     \textbf{Inputs} & \textbf{Type} \\
     \hline
@@ -247,6 +251,7 @@ different users with the same summary, so we keep them all.
 \end{figure*}
 
 \subsection{Preprocessing}
+\label{sec:preprocessing}
 
 We left the source file unchanged and removed no sessions, outliers or
 repeated rows; extreme values are kept unless there is evidence they are
@@ -262,7 +267,7 @@ under the same rules. The assignments are saved to files and verified on
 every load, so every team member uses the same split
 (Section~\ref{sec:results}).
 
-\paragraph{Validation and encoding.} Every session passes through an input
+\paragraph{Input checks and encoding.} Every session passes through an input
 check that rejects missing values, negative counts, rates outside $[0, 1]$
 and invalid category codes, without silently filling in or clipping values.
 The six nominal fields are one-hot encoded, \texttt{Weekend} becomes a 0/1
@@ -281,12 +286,11 @@ generalize to later periods or other websites.
 \section{Features}
 \label{sec:features}
 
-The 17 session-level inputs in Table~\ref{tab:features}, encoded as
-previously mentioned in the preprocessing phase, are fed into our models.
-74 model features are obtained by fitting the encoder on the training split
-(Table~\ref{tab:encoded}). Each nominal field is represented by one
-indicator per observed level instead of its integer code as category codes
-lack a documented order.
+Our models receive the 17 session-level inputs in Table~\ref{tab:features},
+encoded as described in Section~\ref{sec:preprocessing}. Fitting the encoder
+on the training split gives 74 model features (Table~\ref{tab:encoded}). Each
+nominal field is represented by one indicator per observed level instead of
+its integer code, since the codes have no documented order.
 
 \begin{table}[t]
   \centering
@@ -312,24 +316,26 @@ lack a documented order.
     on the training split.}
 \end{table}
 
-\paragraph{Feature engineering.} There are no interaction terms, ratios, or
-polynomial expansions, and the skewed numerical inputs enter the models
-without a log transform; thus far, we have not created any extra features.
-Additionally, we don't employ neural networks or learn embeddings. The
-encoding and classifier are integrated into a single scikit-learn workflow,
-and each model is given a fixed tabular vector.
+\paragraph{Feature engineering.} We have not created any extra features so
+far. There are no interaction terms, ratios or polynomial expansions, and the
+skewed numeric inputs enter the models without a log transform. We also do
+not use neural networks or learned embeddings, so each model receives a fixed
+tabular vector.
 
-\paragraph{Feature sets.} Automatic feature selection is not used by us.
-Rather, in order to examine how performance is dependent on inputs that can
-be challenging to replicate during prediction time, we define three feature
-sets beforehand. All 17 inputs (74 encoded features) are used in the first.
-Since it summarizes past page values and it's unclear if the necessary
-measurements would be accessible prior to a purchase, the second eliminates
-PageValues (16 inputs, 73 features). Additionally, the third eliminates
-BounceRates and ExitRates (14 inputs, 71 features), which rely on analytics
-definitions and history at the page level. Since the supplied data does not
-specify when each measurement was made, these sets represent neither claims
-of leakage nor deployment readiness.
+\paragraph{Augmentation.} We did not augment the data. No sessions were
+duplicated or synthesized, and unlike \citet{sakar2019realtime}, we did not
+oversample the purchase class. Class imbalance is instead handled in the loss
+through class weights (Section~\ref{sec:implementation}).
+
+\paragraph{Feature sets.} We do not use automatic feature selection. Instead,
+we defined three feature sets in advance to measure how much performance
+depends on inputs that may be hard to reproduce at prediction time. The first
+uses all 17 inputs (74 features). The second removes PageValues (16 inputs,
+73 features), since it summarizes past page values and the measurements it
+needs may not exist before a purchase. The third also removes BounceRates and
+ExitRates (14 inputs, 71 features), which depend on page-level analytics
+definitions and history. The data does not say when each measurement was
+made, so these sets are not claims of leakage or of deployment readiness.
 
 All three sets use the same data splits and cross-validation folds, and each
 is fitted as its own pipeline, so a removed input is truly absent rather than
@@ -338,95 +344,229 @@ uses the full 17-input set (Section~\ref{sec:results}); the comparison
 across feature sets is planned for the next stage of the project.
 
 \section{Implementation}
+\label{sec:implementation}
 
-Describe your model and implementation here. Refer to item 4. This may take around a page.
+Our implementation uses Python, pandas and NumPy for data handling,
+scikit-learn for preprocessing and classification, and matplotlib for the
+evaluation figures. Each classifier is combined with the preprocessing steps
+in one pipeline. This lets us pass raw session records to the fitted model
+without having to encode or scale them again by hand.
+
+\paragraph{Baselines.} We implemented two simple baselines before training a
+classifier. The majority-class baseline always predicts no purchase. The
+class-prior baseline gives every session the same purchase probability,
+equal to the purchase rate in the training set (0.1548). Neither uses browsing
+behavior, so they establish what can be achieved without learning from the
+session inputs.
+
+\paragraph{Logistic regression.} Our first trained classifier is
+L2-regularized logistic regression on all 17 inputs. For a session with
+encoded features $\mathbf{x}_i$ and label $y_i \in \{0, 1\}$, the model
+predicts $p_i = \sigma(\mathbf{w}^\top \mathbf{x}_i + b)$. Training minimizes
+\begin{equation*}
+  \frac{1}{2}\lVert \mathbf{w} \rVert^2
+  + C \sum_{i=1}^{n} s_i \, \ell_i ,
+\end{equation*}
+where $\ell_i = -y_i \log p_i - (1 - y_i) \log (1 - p_i)$ is the log-loss
+and $s_i$ is a class weight. The log-loss penalizes confident wrong
+probabilities, and the first term discourages large coefficients. $C$ is the
+inverse regularization strength, so smaller values apply a stronger penalty.
+In an unweighted fit, every $s_i = 1$. Balanced weights are inversely
+proportional to class frequency, so a purchase counts about 5.5 times as much
+as a non-purchase, without adding or removing training sessions.
+
+\paragraph{Optimization.} We minimize this objective with L-BFGS, a
+quasi-Newton method. Like gradient descent, it follows the gradient of the
+loss, but it also estimates the curvature from its recent steps, which lets
+it take better-scaled steps and converge in fewer iterations. The objective
+is convex and the training set is small, so full-batch optimization is cheap
+and we did not need stochastic gradient descent. We used a tolerance of
+$10^{-4}$ and a maximum of 2,000 iterations. We compared four values of $C$,
+$\{0.01, 0.1, 1, 10\}$, each with and without balanced class weights.
+
+These eight settings were compared on the five fixed training folds. The
+encoder, scaler and classifier were fitted separately within each fold, and
+we selected the setting with the highest mean purchase average precision.
+The selected model used $C=0.1$ with balanced class weights and was then
+refitted on all 8,632 training sessions. All 40 cross-validation fits and the
+final fit converged, and the final fit took 44 iterations.
+
+\paragraph{Reproducibility.} We saved the complete fitted pipeline with
+joblib, reloaded it and verified that its predictions matched exactly on all
+1,849 validation sessions. The evaluation code exports scores, predicted
+classes, metrics and confusion matrices with the split identifier and seed.
+Random forest, XGBoost and comparisons across the reduced feature sets have
+not yet been evaluated; they form the next stage of the project.
+
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrrrrrr}
+    \hline
+    \textbf{Model} & \textbf{Threshold} & \textbf{AP} & \textbf{ROC-AUC} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{Brier} \\
+    \hline
+    Majority class & 0.5000 & 0.1547 & 0.5000 & 0.0000 & 0.0000 & 0.0000 & 0.1547 \\
+    Class prior & 0.5000 & 0.1547 & 0.5000 & 0.0000 & 0.0000 & 0.0000 & 0.1308 \\
+    Logistic regression & 0.5000 & 0.6644 & 0.9008 & 0.5216 & 0.7587 & 0.6182 & 0.1197 \\
+    Logistic regression & 0.6057 & 0.6644 & 0.9008 & 0.6242 & 0.6678 & 0.6453 & 0.1197 \\
+    \hline
+  \end{tabular}
+  \caption{\label{tab:validation}
+    Validation results for the baselines and selected logistic regression
+    model. The threshold of 0.6057 was selected on these same validation
+    sessions, so its F1 is a development result. Higher is better for all
+    reported metrics except Brier.}
+\end{table*}
 
 \section{Results and Evaluation}
 \label{sec:results}
 
-How are you evaluating your model? What results do you have so far? What are your baselines? Refer to item 5. This may take around 0.5 pages.
+\paragraph{Evaluation strategy.} We use the fixed grouped, stratified split
+described in Section~\ref{sec:preprocessing}. Cross-validation within training selects model
+settings; validation supports development comparisons and threshold
+selection. All results below are from training cross-validation or the
+validation set, which contains 286 purchases among 1,849 sessions. We have
+not evaluated test performance. Before the final test evaluation, we will
+freeze the fitted models, feature sets, calibration methods and thresholds.
+
+Our primary metric is purchase average precision (AP), which summarizes
+precision and recall as the score threshold changes. We also report ROC-AUC,
+purchase precision, recall and F1, a confusion matrix, and the Brier score
+and a reliability plot to examine probability quality. AP and ROC-AUC use
+the model scores rather than the predicted classes. For class predictions,
+we report the reference threshold of 0.5 and a threshold chosen to maximize
+purchase F1 on validation. We use F1 as a compromise between precision and
+recall because we do not have reliable business costs for either kind of
+error.
+
+
+
+\paragraph{Preliminary results.} Table~\ref{tab:validation} shows that logistic
+regression learns useful information beyond the class balance: its AP is
+0.6644, compared with 0.1547 for both baselines. At threshold 0.5, it finds
+217 of the 286 purchases, with 199 false alarms. Raising the threshold to
+0.6057 reduces false alarms to 115 but finds only 191 purchases. Precision
+therefore rises from 52.2\% to 62.4\%, while recall falls from 75.9\% to
+66.8\%. The resulting F1 of 0.6453 is optimistic because the same validation
+sessions were used to choose that threshold. For comparison, maximizing F1
+for either constant-score baseline predicts every session as a purchase and
+gives an F1 of 0.2679.
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lrrrr}
+    \hline
+    & \multicolumn{2}{c}{\textbf{Mean CV AP}} & \multicolumn{2}{c}{\textbf{Mean CV Brier}} \\
+    \textbf{$C$} & \textbf{None} & \textbf{Bal.} & \textbf{None} & \textbf{Bal.} \\
+    \hline
+    0.01 & 0.6428 & 0.6430 & 0.0871 & 0.1264 \\
+    0.1  & 0.6418 & \textbf{0.6469} & 0.0851 & 0.1212 \\
+    1    & 0.6370 & 0.6447 & 0.0853 & 0.1214 \\
+    10   & 0.6343 & 0.6430 & 0.0856 & 0.1218 \\
+    \hline
+  \end{tabular}
+  \caption{\label{tab:cv}
+    Logistic regression on the five training folds, without class weights
+    (None) and with balanced weights (Bal.). The selected setting is in bold.
+    Lower Brier is better.}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.6\columnwidth]{figures/reliability.png}
+  \caption{\label{fig:reliability}
+    Validation reliability plot for the selected model. Points below the
+    dashed line are overestimates. The lower panel counts sessions per bin.}
+\end{figure}
+
+\paragraph{Class weighting and probability quality.} Table~\ref{tab:cv}
+compares all eight settings. They fall within 0.013 AP of each other, well
+inside the fold-to-fold standard deviation of about 0.028, so weighting and
+the choice of $C$ make no clear difference to ranking. Weighting does clearly
+hurt probability quality, raising mean Brier from about 0.085 to about 0.12.
+On validation, the selected model's Brier score is 0.1197, only modestly
+better than the class-prior baseline's 0.1308. The reliability plot
+(Figure~\ref{fig:reliability}) shows that the model overestimates purchase
+probability in every bin. For example, sessions in the 0.6--0.7 bin have an
+average predicted probability of 0.65 but purchase only 37\% of the time.
+The model ranks sessions usefully, but its probabilities should not yet be
+read as purchase chances.
 
 \section{Feedback and Plans}
 
-Write about your plans for the remainder of the project. This should include a discussion of the feedback you received from your TA, and how you plan to improve your approach. Reflect on your implementation and areas for improvement. Refer to item 6. This may be around 0.5 pages.
+During our consultation, we walked the TA through our preprocessing,
+five-fold cross-validation setup and logistic regression results, and raised
+our concern about class imbalance.
 
-\section{Template Notes}
+The TA suggested that a random baseline can be a useful comparison in some
+cases, with performance above that baseline providing an initial check that
+the model is learning useful information. We currently compare against
+majority-class and class-prior baselines. The class-prior baseline gives
+every session the same score, so it does not make random guesses. To follow
+up on the advice, we plan to add a baseline that randomly predicts purchase
+according to the training purchase rate and repeat it with several seeds
+to show how much its results vary.
 
-You can remove this section or comment it out, as it only contains instructions for how to use this template. You may use subsections in your document as you find appropriate.
+The TA also encouraged us to try models beyond logistic regression. We
+explained that random forest and XGBoost are already part of our plan and
+will be implemented next. Both can learn nonlinear relationships between
+the session inputs. We will compare them using the same splits, training
+folds and metrics, so any improvement can be assessed consistently.
 
-\subsection{Tables and figures}
+\paragraph{What we will change.} Our first model changed the plan in two
+ways. First, better ranking did not mean better probabilities. Class
+weighting gave no clear AP gain but worse Brier scores, so we will treat
+unweighted models as the default and compare them with models calibrated on
+out-of-fold training predictions. We will not present the current weighted
+probabilities as purchase chances. Second, the numeric inputs are heavily
+skewed but enter logistic regression unchanged. We will test a
+zero-preserving log transform within the training folds, while tree models
+keep the original values. We also still need to run the feature-set study
+with and without PageValues, and to inspect errors by month and visitor type.
 
-See Table~\ref{citation-guide} for an example of a table and its caption.
-See Figure~\ref{fig:experiments} for an example of a figure and its caption.
-
-
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
-\end{figure}
-
-\begin{figure*}[t]
-  \includegraphics[width=0.48\linewidth]{example-image-a} \hfill
-  \includegraphics[width=0.48\linewidth]{example-image-b}
-  \caption {A minimal working example to demonstrate how to place
-    two images side-by-side.}
-\end{figure*}
-
-
-\subsection{Citations}
-
-\begin{table*}
-  \centering
-  \begin{tabular}{lll}
-    \hline
-    \textbf{Output}           & \textbf{natbib command} & \textbf{ACL only command} \\
-    \hline
-    \citep{Gusfield:97}       & \verb|\citep|           &                           \\
-    \citealp{Gusfield:97}     & \verb|\citealp|         &                           \\
-    \citet{Gusfield:97}       & \verb|\citet|           &                           \\
-    \citeyearpar{Gusfield:97} & \verb|\citeyearpar|     &                           \\
-    \citeposs{Gusfield:97}    &                         & \verb|\citeposs|          \\
-    \hline
-  \end{tabular}
-  \caption{\label{citation-guide}
-    Citation commands supported by the style file.
-  }
-\end{table*}
-
-Table~\ref{citation-guide} shows the syntax supported by the style files.
-We encourage you to use the natbib styles.
-You can use the command \verb|\citet| (cite in text) to get ``author (year)'' citations, like this citation to a paper by \citet{Gusfield:97}.
-You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
-You can use the command \verb|\citealp| (alternative cite without parentheses) to get ``author, year'' citations, which is useful for using citations within parentheses (e.g. \citealp{Gusfield:97}).
-
-\subsection{References}
-
-\nocite{Ando2005,andrew2007scalable,rasooli-tetrault-2015}
-
-Many websites where you can find academic papers also allow you to export a bib file for citation or bib formatted entry. Copy this into the \texttt{custom.bib} and you will be able to cite the paper in the \LaTeX{}. You can remove the example entries.
-
-\subsection{Equations}
-
-An example equation is shown below:
-\begin{equation}
-  \label{eq:example}
-  A = \pi r^2
-\end{equation}
-
-Labels for equation numbers, sections, subsections, figures and tables
-are all defined with the \verb|\label{label}| command and cross references
-to them are made with the \verb|\ref{label}| command.
-This an example cross-reference to Equation~\ref{eq:example}. You can also write equations inline, like this: $A=\pi r^2$.
-
-
-% \section*{Limitations}
+\paragraph{Timeline.} We plan to finish random forest, XGBoost, tuning, the
+feature-set study, calibration and error analysis by November 28. By
+December 3, we will freeze the selected model and threshold, run the single
+test evaluation and connect the saved pipeline to the Streamlit
+demonstration. The final week is reserved for the report and demo.
 
 \section*{Team Contributions}
 
-Write in this section a few sentences describing the contributions of each team member. What did each member work on? Refer to item 7.
+Ankur worked on the project setup, dataset checks and exploratory
+analysis. He also prepared the data splits and preprocessing pipeline used
+for the model experiments.
+
+\medskip\noindent Allen implemented the baseline models and logistic regression. He
+evaluated their performance and prepared the results and figures used to
+compare the models.
+
+\medskip\noindent Krish organized the progress report and wrote the introduction and
+related work. He also prepared the dataset and feature descriptions,
+explaining the data properties and how the inputs are represented.
+
+\section*{Generative AI Disclosure}
+
+We used generative AI throughout this project, following the course policy.
+As a team, we first discussed the overall goals and divided the work into
+smaller tasks. We then used AI to turn the notes from those discussions into
+the written GitHub issues we used to track the work. The decisions in that
+plan, including the dataset, the models to compare and the evaluation
+protocol, came from our own discussions.
+
+Within individual tasks, we used AI for background research, for building
+intuition about the methods we applied, and for writing parts of the code,
+especially where we did not know the syntax of a library. We asked it to
+explain the code it produced, so we could understand each step and remove
+anything the task did not need, and we checked the results with our unit
+tests and by rerunning the pipeline. We also used AI to help draft and edit
+the text of this report. All reported numbers come from our saved result
+files. We reviewed the AI-generated code and text and take full
+responsibility for this submission.
+
+\paragraph{Carbon footprint.} We did not record compute time, hardware or
+region, so we used the course's estimate of 4.32\,g of CO$_2$ per query.
+Across roughly 35 to 40 queries, this gives about 151 to 173\,g of CO$_2$.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}

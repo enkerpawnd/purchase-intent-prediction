@@ -1,0 +1,78 @@
+\begin{thebibliography}{11}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Breiman(2001)}]{breiman2001random}
+Leo Breiman. 2001.
+\newblock \href {https://doi.org/10.1023/A:1010933404324} {Random forests}.
+\newblock \emph{Machine Learning}, 45(1):5--32.
+
+\bibitem[{Chen and Guestrin(2016)}]{chen2016xgboost}
+Tianqi Chen and Carlos Guestrin. 2016.
+\newblock \href {https://doi.org/10.1145/2939672.2939785} {{XGBoost}: A
+  scalable tree boosting system}.
+\newblock In \emph{Proceedings of the 22nd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 785--794.
+
+\bibitem[{He and Garcia(2009)}]{he2009imbalanced}
+Haibo He and Edwardo~A. Garcia. 2009.
+\newblock \href {https://doi.org/10.1109/TKDE.2008.239} {Learning from
+  imbalanced data}.
+\newblock \emph{IEEE Transactions on Knowledge and Data Engineering},
+  21(9):1263--1284.
+
+\bibitem[{Kaufman et~al.(2012)Kaufman, Rosset, Perlich, and
+  Stitelman}]{kaufman2012leakage}
+Shachar Kaufman, Saharon Rosset, Claudia Perlich, and Ori Stitelman. 2012.
+\newblock \href {https://doi.org/10.1145/2382577.2382579} {Leakage in data
+  mining: Formulation, detection, and avoidance}.
+\newblock \emph{ACM Transactions on Knowledge Discovery from Data}, 6(4):1--21.
+
+\bibitem[{Moe and Fader(2004)}]{moe2004dynamic}
+Wendy~W. Moe and Peter~S. Fader. 2004.
+\newblock \href {https://doi.org/10.1287/mnsc.1040.0153} {Dynamic conversion
+  behavior at e-commerce sites}.
+\newblock \emph{Management Science}, 50(3):326--335.
+
+\bibitem[{Montgomery et~al.(2004)Montgomery, Li, Srinivasan, and
+  Liechty}]{montgomery2004clickstream}
+Alan~L. Montgomery, Shibo Li, Kannan Srinivasan, and John~C. Liechty. 2004.
+\newblock \href {https://doi.org/10.1287/mksc.1040.0073} {Modeling online
+  browsing and path analysis using clickstream data}.
+\newblock \emph{Marketing Science}, 23(4):579--595.
+
+\bibitem[{Niculescu-Mizil and Caruana(2005)}]{niculescu2005predicting}
+Alexandru Niculescu-Mizil and Rich Caruana. 2005.
+\newblock \href {https://doi.org/10.1145/1102351.1102430} {Predicting good
+  probabilities with supervised learning}.
+\newblock In \emph{Proceedings of the 22nd International Conference on Machine
+  Learning}, pages 625--632.
+
+\bibitem[{Saito and Rehmsmeier(2015)}]{saito2015precision}
+Takaya Saito and Marc Rehmsmeier. 2015.
+\newblock \href {https://doi.org/10.1371/journal.pone.0118432} {The
+  precision-recall plot is more informative than the {ROC} plot when evaluating
+  binary classifiers on imbalanced datasets}.
+\newblock \emph{PLOS ONE}, 10(3):e0118432.
+
+\bibitem[{Sakar and Kastro(2018)}]{sakar2018dataset}
+C.~Okan Sakar and Yomi Kastro. 2018.
+\newblock \href {https://doi.org/10.24432/C5F88Q} {Online shoppers purchasing
+  intention dataset}.
+\newblock UCI Machine Learning Repository.
+\newblock Licensed under CC BY 4.0.
+
+\bibitem[{Sakar et~al.(2019)Sakar, Polat, Katircioglu, and
+  Kastro}]{sakar2019realtime}
+C.~Okan Sakar, S.~Olcay Polat, Mete Katircioglu, and Yomi Kastro. 2019.
+\newblock \href {https://doi.org/10.1007/s00521-018-3523-0} {Real-time
+  prediction of online shoppers' purchasing intention using multilayer
+  perceptron and {LSTM} recurrent neural networks}.
+\newblock \emph{Neural Computing and Applications}, 31(10):6893--6908.
+
+\bibitem[{Shwartz-Ziv and Armon(2022)}]{shwartzziv2022tabular}
+Ravid Shwartz-Ziv and Amitai Armon. 2022.
+\newblock \href {https://doi.org/10.1016/j.inffus.2021.11.011} {Tabular data:
+  Deep learning is not all you need}.
+\newblock \emph{Information Fusion}, 81:84--90.
+
+\end{thebibliography}

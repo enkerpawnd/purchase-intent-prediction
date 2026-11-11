@@ -1,0 +1,84 @@
+\relax 
+\bibstyle{acl_natbib}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{sakar2018dataset}
+\citation{sakar2019realtime}
+\citation{moe2004dynamic}
+\citation{montgomery2004clickstream}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{1}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Purchase intent on this dataset.}{1}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Clickstream models of conversion.}{1}{section*.2}\protected@file@percent }
+\citation{breiman2001random}
+\citation{chen2016xgboost}
+\citation{shwartzziv2022tabular}
+\citation{he2009imbalanced}
+\citation{saito2015precision}
+\citation{niculescu2005predicting}
+\citation{kaufman2012leakage}
+\citation{sakar2018dataset}
+\citation{sakar2019realtime}
+\@writefile{toc}{\contentsline {paragraph}{Models for tabular data.}{2}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Imbalance, evaluation and calibration.}{2}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Dataset}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Source and structure}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces  The 17 session-level inputs. Category codes have no documented meaning or order.}}{2}{table.caption.5}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:features}{{1}{2}{The 17 session-level inputs. Category codes have no documented meaning or order}{table.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Properties of the data}{2}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Class imbalance.}{2}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Skewed activity and meaningful zeros.}{2}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Correlated inputs.}{2}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Uneven categories.}{2}{section*.9}\protected@file@percent }
+\citation{sakar2019realtime}
+\@writefile{toc}{\contentsline {paragraph}{Identical sessions.}{3}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Preprocessing}{3}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:preprocessing}{{3.3}{3}{Preprocessing}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Splitting.}{3}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Input checks and encoding.}{3}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Limitations.}{3}{section*.14}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Encoded model features for all 17 inputs, with category levels counted on the training split.}}{3}{table.caption.15}\protected@file@percent }
+\newlabel{tab:encoded}{{2}{3}{Encoded model features for all 17 inputs, with category levels counted on the training split}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Features}{3}{section.4}\protected@file@percent }
+\newlabel{sec:features}{{4}{3}{Features}{section.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Feature engineering.}{3}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Augmentation.}{3}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Feature sets.}{3}{section*.18}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Training split ($n = 8{,}632$). Left: class balance. Centre and right: share of sessions ending in a purchase by month and by visitor type, with sample sizes. The dashed line marks the overall purchase rate (15.5\%).}}{4}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:context}{{1}{4}{Training split ($n = 8{,}632$). Left: class balance. Centre and right: share of sessions ending in a purchase by month and by visitor type, with sample sizes. The dashed line marks the overall purchase rate (15.5\%)}{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Implementation}{4}{section.5}\protected@file@percent }
+\newlabel{sec:implementation}{{5}{4}{Implementation}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Baselines.}{4}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Logistic regression.}{4}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Optimization.}{4}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{4}{section*.22}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces  Validation results for the baselines and selected logistic regression model. The threshold of 0.6057 was selected on these same validation sessions, so its F1 is a development result. Higher is better for all reported metrics except Brier.}}{5}{table.caption.23}\protected@file@percent }
+\newlabel{tab:validation}{{3}{5}{Validation results for the baselines and selected logistic regression model. The threshold of 0.6057 was selected on these same validation sessions, so its F1 is a development result. Higher is better for all reported metrics except Brier}{table.caption.23}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Results and Evaluation}{5}{section.6}\protected@file@percent }
+\newlabel{sec:results}{{6}{5}{Results and Evaluation}{section.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Evaluation strategy.}{5}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Preliminary results.}{5}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Class weighting and probability quality.}{5}{section*.28}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces  Logistic regression on the five training folds, without class weights (None) and with balanced weights (Bal.). The selected setting is in bold. Lower Brier is better.}}{5}{table.caption.26}\protected@file@percent }
+\newlabel{tab:cv}{{4}{5}{Logistic regression on the five training folds, without class weights (None) and with balanced weights (Bal.). The selected setting is in bold. Lower Brier is better}{table.caption.26}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Validation reliability plot for the selected model. Points below the dashed line are overestimates. The lower panel counts sessions per bin.}}{5}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:reliability}{{2}{5}{Validation reliability plot for the selected model. Points below the dashed line are overestimates. The lower panel counts sessions per bin}{figure.caption.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Feedback and Plans}{5}{section.7}\protected@file@percent }
+\bibdata{custom}
+\bibcite{breiman2001random}{{1}{2001}{{Breiman}}{{}}}
+\bibcite{chen2016xgboost}{{2}{2016}{{Chen and Guestrin}}{{}}}
+\bibcite{he2009imbalanced}{{3}{2009}{{He and Garcia}}{{}}}
+\bibcite{kaufman2012leakage}{{4}{2012}{{Kaufman et~al.}}{{Kaufman, Rosset, Perlich, and Stitelman}}}
+\@writefile{toc}{\contentsline {paragraph}{What we will change.}{6}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Timeline.}{6}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Carbon footprint.}{6}{section*.33}\protected@file@percent }
+\bibcite{moe2004dynamic}{{5}{2004}{{Moe and Fader}}{{}}}
+\bibcite{montgomery2004clickstream}{{6}{2004}{{Montgomery et~al.}}{{Montgomery, Li, Srinivasan, and Liechty}}}
+\bibcite{niculescu2005predicting}{{7}{2005}{{Niculescu-Mizil and Caruana}}{{}}}
+\bibcite{saito2015precision}{{8}{2015}{{Saito and Rehmsmeier}}{{}}}
+\bibcite{sakar2018dataset}{{9}{2018}{{Sakar and Kastro}}{{}}}
+\bibcite{sakar2019realtime}{{10}{2019}{{Sakar et~al.}}{{Sakar, Polat, Katircioglu, and Kastro}}}
+\bibcite{shwartzziv2022tabular}{{11}{2022}{{Shwartz-Ziv and Armon}}{{}}}
+\gdef \@abspage@last{7}
